@@ -102,13 +102,33 @@ module.exports.addRoutes = function(app){
     /**
      * 删除用户
      */
-    app.get('/user/delete', function(req, res){
-
+    app.get('/user/delete', security.adminRequire, function(req, res){
+        var id = req.query.id;
+        if(!id){
+            res.json({code:400});
+        }else{
+            User.findByIdAndRemove(id).exec()
+                .then(function(){
+                    res.json({code:200});
+                }, function(){
+                    res.json({code:500})
+                });
+        }
     });
     /**
      * 更新用户角色
      */
-    app.get('/user/update/role', function(req, res){
-
+    app.get('/user/update/role', security.adminRequire, function(req, res){
+        var query = req.query;
+        if(!query.id||!query.role){
+            res.json({code:400});
+        }else{
+            User.findByIdAndUpdate(query.id, {role:query.role}).exec()
+                .then(function(){
+                    res.json({code:200});
+                }, function(){
+                    res.json({code:500});
+                });
+        }
     });
 };
