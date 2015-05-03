@@ -2,6 +2,7 @@ var Account = require('../models/account.js');
 var User = require('../models/user.js');
 var passport = require('passport');
 var security = require('../security.js');
+var q = require('q');
 module.exports.addRoutes = function(app){
     /**
      * 用户登录
@@ -80,7 +81,23 @@ module.exports.addRoutes = function(app){
      * 获取用户列表
      */
     app.get('/user/list', security.adminRequire, function(req, res){
-        debugger
+        var query = req.query,
+            result = {};
+        q.all([
+            User.find({}).skip(query.offset||0).limit(query.limit||20).exec(),
+            User.count().exec()
+        ])
+            .spread(function(users, count){
+                result.users = users;
+                result.count = count;
+                result.code = 200;
+                res.json(result);
+            })
+            .fail(function(error){
+                result.code = 500;
+                res.json(result);
+                console.error(error.message);
+            });
     });
     /**
      * 删除用户
