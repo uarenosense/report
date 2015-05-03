@@ -5,7 +5,8 @@ var userSchema = new Schema({
     name:String
 });
 //set option
-userSchema.set('collection','user');
+userSchema.set('collection', 'user');
+userSchema.set('_id', false);
 /**
  * **************************************
  * static methods

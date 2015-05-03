@@ -1,6 +1,7 @@
 var Account = require('../models/account.js');
 var User = require('../models/user.js');
 var passport = require('passport');
+var security = require('../security.js');
 module.exports.addRoutes = function(app){
     /**
      * 用户登录
@@ -9,9 +10,15 @@ module.exports.addRoutes = function(app){
         passport.authenticate('local', onAuth)(req, res, next);
         function onAuth(error, account, info){
             if(account){
-                User.findById(account.userId, onFind);
+                req.login(account, function(error){
+                    if(error){
+                        res.json({code:500});
+                    }else{
+                        User.findById(account.userId, onFind);
+                    }
+                });
             }else if(!error){
-                res.json({code:403,message:'用户名或密码错误'});
+                res.json({code:401,message:'用户名或密码错误'});
             }else{
                 res.json({code:500});
             }
@@ -29,7 +36,7 @@ module.exports.addRoutes = function(app){
      */
     app.post('/user/logout', function(req, res){
         req.logout();
-        res.redirect('/');
+        res.json({code:200});
     });
     /**
      * 注册
@@ -58,7 +65,13 @@ module.exports.addRoutes = function(app){
                 }
             };
             function onAuth(error, account, info){
-                res.json({user:user});
+                req.login(account, function(error){
+                    if(error){
+                        res.json({code:500});
+                    }else{
+                        res.json({user:user});
+                    }
+                });
             }
 
         }
@@ -66,7 +79,7 @@ module.exports.addRoutes = function(app){
     /**
      * 获取用户列表
      */
-    app.get('/user/list', function(req, res){
+    app.get('/user/list', security.adminRequire, function(req, res){
         debugger
     });
     /**
