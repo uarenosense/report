@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="./vendor/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="./css/login.css">
+</head>
+<body>
+    <div ng-app="login" ng-controller="login" class="container">
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="{{tab=='login'?'active':''}}" ng-click="tab='login'"><a href="javascript:;">登录</a></li>
+            <li role="presentation" class="{{tab=='regist'?'active':''}}" ng-click="tab='regist'"><a href="javascript:;">注册</a></li>
+        </ul>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-signin">
+                    <input ng-model="data.username" type="email" id="inputEmail" class="form-control" placeholder="邮箱" required="" autofocus="">
+                    <input ng-model="data.password" type="password" id="inputPassword" class="form-control" placeholder="密码" required="">
+                    <input ng-model="data.name" ng-if="tab=='regist'" type="text" id="inputPassword" class="form-control" placeholder="姓名" required="">
+                    <div class="checkbox" ng-if="tab=='login'">
+                        <label>
+                            <input ng-model="remember" ng-true-value="true" ng-false-value="false" type="checkbox" value="remember-me">记住我
+                        </label>
+                    </div>
+                    <button ng-click="submit()" class="btn btn-lg btn-primary btn-block" type="submit">{{tab=='regist'?'注册':'登录'}}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+<script src="vendor/jquery/jquery.js"></script>
+<script src="vendor/angular/angular.js"></script>
+<script src="js/login.js"></script>
+</body>
+</html>

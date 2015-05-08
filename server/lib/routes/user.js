@@ -70,7 +70,7 @@ module.exports.addRoutes = function(app){
                     if(error){
                         res.json({code:500});
                     }else{
-                        res.json({user:user});
+                        res.json({code:200,user:user});
                     }
                 });
             }
