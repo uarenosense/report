@@ -1,11 +1,16 @@
-angular.module('app', ['ngRoute'])
+angular.module('app', ['ui.router'])
+    .controller('tab', ['$scope', '$location', function($scope, $location){
+        $scope.checkActive = function(reg){
+            return new RegExp(reg).test($location.path())?'active':'';
+        };
+    }])
     .controller('accounts', ['$scope', '$http', function($scope, $http){
         $http.get('/user/list')
             .success(function(data){
                 $scope.users = data.users;
             });
         $scope.delete = function(user){
-            $http.get('/user/delete?id='+user['_id'])
+            $http.get('/user/delete?id='+user.id)
                 .success(function(data){
                     if(data.code==200){
                         var index = $scope.users.indexOf(user);
@@ -16,7 +21,7 @@ angular.module('app', ['ngRoute'])
                 });
         };
         $scope.updateRole = function(user){
-            $http.get('/user/update/role?'+jQuery.param({id:user['_id'], role:user.role}))
+            $http.get('/user/update/role?'+jQuery.param({id:user.id, role:user.role}))
                 .success(function(data){
                     if(data.code==200){
 
@@ -30,8 +35,41 @@ angular.module('app', ['ngRoute'])
                 });
         };
     }])
-    .config(['$routeProvider', function($routeProvider){
-        $routeProvider
-            .when('/accounts', {templateUrl:'accounts', controller:'accounts'})
-            .otherwise({redirectTo: '/my'});
+    .controller('group', ['$scope', function($scope){
+    }])
+    .controller('groupReport', ['$scope', function($scope){
+    }])
+    .controller('groupInfo', ['$scope', function($scope){
+    }])
+    .controller('my', ['$scope', function($scope){
+    }])
+    .config(['$stateProvider', '$urlRouterProvider',function($stateProvider, $urlRouterProvider){
+        $urlRouterProvider
+            .otherwise('my');
+        $stateProvider
+            .state('account', {
+                url:'/account',
+                templateUrl:'accounts',
+                controller:'accounts'
+            })
+            .state('my', {
+                url:'/my',
+                templateUrl:'my',
+                controller:'my'
+            })
+            .state('group', {
+                url:'/group',
+                templateUrl:'group',
+                controller:'group'
+            })
+            .state('group.report', {
+                url:'/report',
+                templateUrl:'group-report',
+                controller:'groupReport'
+            })
+            .state('group.info', {
+                url:'/info',
+                templateUrl:'group-info',
+                controller:'groupInfo'
+            });
     }]);

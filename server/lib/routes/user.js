@@ -88,14 +88,33 @@ module.exports.addRoutes = function(app){
             User.count().exec()
         ])
             .spread(function(users, count){
+                var ids = users.map(function(user){
+                    return user.id;
+                });
                 result.users = users;
                 result.count = count;
-                result.code = 200;
+                return Account.find({userId:{'$in':ids}}).exec();
+            })
+            .then(function(accounts){
+                var _map = {};
+                accounts.forEach(function(account){
+                    _map[account.userId] = account;
+                });
+                result.users = result.users.map(function(item){
+                    var account = _map[item.id],
+                        user = {
+                            id:item.id,
+                            name:item.name
+                        };
+                    if(account){
+                        user.username = account.username;
+                    }
+                    return user;
+                });
                 res.json(result);
             })
             .fail(function(error){
-                result.code = 500;
-                res.json(result);
+                res.json({code:500});
                 console.error(error.message);
             });
     });
