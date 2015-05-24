@@ -6,16 +6,22 @@ module.exports.addRoutes = function(app){
      * 获取小组信息
      */
     app.get('/group/info', security.loginRequire, function(req, res){
+        var groupInfo;
         User.findById(req.user.userId).exec()
             .then(function(user){
                 if(user.role=='leader'){
                     Group.findOne({leader:user.id}).exec()
                         .then(function(group){
-                            if(!group) return Group.create({leader:user.id}).exec();
+                            if(!group) return Group.create({leader:user.id, members:[user.id]}).exec();
                             else return group;
                         })
                         .then(function(group){
-                            res.json({code:200, group:group});
+                            groupInfo = group;
+                            return User.find({userId:{'$in':group.members}}).exec();
+                        })
+                        .then(function(members){
+                            groupInfo.members = members;
+                            res.json({code:200, group:groupInfo});
                         }, function(){
                             res.json({code:500});
                         });
@@ -30,7 +36,45 @@ module.exports.addRoutes = function(app){
      * 更新小组信息
      */
     app.post('/group/info/update', function(req, res){
-
+        User.findById(req.user.userId).exec()
+            .then(function(user){
+                if(user.role=='leader'){
+                    Group.findByIdAndUpdate(req.body.id ,req.body).exec()
+                        .then(function(){
+                            res.json({code:200});
+                        }, function(){
+                            res.json({code:500});
+                        });
+                }else{
+                    res.json({code:401, message:'不是组长'})
+                }
+            }, function(){
+                res.json({code:500})
+            });
+    });
+    /**
+     * 更新小组信息
+     */
+    app.get('/group/members/add', function(req, res){
+        User.findById(req.user.userId).exec()
+            .then(function(user){
+                if(user.role=='leader'){
+                    Group.findById(req.query.groupId).exec()
+                        .then(function(group){
+                            group.members.push(req.query.userId);
+                            return group.save();
+                        })
+                        .then(function(){
+                            res.json({code:200});
+                        },function(){
+                            res.json({code:500});
+                        });
+                }else{
+                    res.json({code:401, message:'不是组长'})
+                }
+            }, function(){
+                res.json({code:500})
+            });
     });
     /**
      * 获取小组日报

@@ -119,6 +119,22 @@ module.exports.addRoutes = function(app){
             });
     });
     /**
+     * 获取用户列表
+     */
+    app.get('/user/search', security.adminRequire, function(req, res){
+        var query = req.query,
+            result = {};
+        User.find({name:{$regex:query.name}}).exec()
+            .then(function(users){
+                result.code = 200;
+                result.users = users;
+                res.json(result);
+            }, function(error){
+                res.json({code:500});
+                console.error(error.message);
+            });
+    });
+    /**
      * 删除用户
      */
     app.get('/user/delete', security.adminRequire, function(req, res){

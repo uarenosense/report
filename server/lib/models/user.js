@@ -8,6 +8,7 @@ var userSchema = new Schema({
 //set option
 userSchema.set('collection', 'user');
 userSchema.set('_id', false);
+userSchema.set('toJSON', { getters: true, virtuals: true });
 /**
  * **************************************
  * static methods

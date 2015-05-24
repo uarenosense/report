@@ -4,9 +4,10 @@ var Schema = mongoose.Schema;
 var groupSchema = new Schema({
     name:String,
     leader:String,
-    members:[{userId:String}]
+    members:[String]
 });
 //set option
 groupSchema.set('collection', 'group');
+groupSchema.set('toJSON', { getters: true, virtuals: true });
 
 module.exports = mongoose.model('Group', groupSchema);
