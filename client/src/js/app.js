@@ -69,6 +69,17 @@ angular.module('app', ['ui.router', 'ui.bootstrap'])
                 console.log('dismissed');
             });
         };
+        $scope.delete = function(user){
+            $http.get('/group/members/delete?'+jQuery.param({groupId:$scope.group.id, userId:user.id}))
+                .success(function(data){
+                    if(data.code==200){
+                        var index = $scope.group.members.indexOf(user);
+                        if(index!=-1){
+                            $scope.group.members.splice(index, 1);
+                        }
+                    }
+                });
+        };
     }])
     .controller('addMember', ['$scope', '$modalInstance', '$http',function($scope, $modalInstance, $http){
         $scope.search = function(){

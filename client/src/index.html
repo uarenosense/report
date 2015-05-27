@@ -82,7 +82,7 @@
                     <tr ng-repeat="u in group.members">
                         <td>{{$index+1}}</td>
                         <td>{{u.name}}</td>
-                        <td></td>
+                        <td><button ng-click="delete(u)" type="button" class="btn btn-warning btn-xs">删除</button></td>
                     </tr>
                     </tbody>
                 </table>

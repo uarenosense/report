@@ -17,11 +17,17 @@ module.exports.addRoutes = function(app){
                         })
                         .then(function(group){
                             groupInfo = group;
-                            return User.find({userId:{'$in':group.members}}).exec();
+                            return User.find({'_id':{'$in':group.members}}).exec();
                         })
                         .then(function(members){
-                            groupInfo.members = members;
-                            res.json({code:200, group:groupInfo});
+                            var list,query = {};
+                            members.forEach(function(item){
+                                query[item.id] = item;
+                            });
+                            list = groupInfo.members.map(function(item){
+                                return query[item];
+                            });
+                            res.json({code:200, group:{id:groupInfo.id, name:groupInfo.name, members:list}});
                         }, function(){
                             res.json({code:500});
                         });
@@ -62,6 +68,30 @@ module.exports.addRoutes = function(app){
                     Group.findById(req.query.groupId).exec()
                         .then(function(group){
                             group.members.push(req.query.userId);
+                            return group.save();
+                        })
+                        .then(function(){
+                            res.json({code:200});
+                        },function(){
+                            res.json({code:500});
+                        });
+                }else{
+                    res.json({code:401, message:'不是组长'})
+                }
+            }, function(){
+                res.json({code:500})
+            });
+    });
+    /**
+     * 更新小组信息
+     */
+    app.get('/group/members/delete', function(req, res){
+        User.findById(req.user.userId).exec()
+            .then(function(user){
+                if(user.role=='leader'){
+                    Group.findById(req.query.groupId).exec()
+                        .then(function(group){
+                            group.members.pull(req.query.userId);
                             return group.save();
                         })
                         .then(function(){
