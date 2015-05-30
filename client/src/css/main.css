@@ -1,4 +1,10 @@
 .group-info-form{margin-top:20px;}
 
 .group-panel{margin-top:20px;}
-.group-panel .panel-heading .btn{margin-left:10px;}
+.panel-report .panel-heading .btn,.group-panel .panel-heading .btn{margin-left:10px;}
+
+.edit-report .input-content{width:350px;}
+.edit-report .input-time{width:60px;}
+.edit-report .form-control{height:24px;}
+
+.edit-report .btn-group{margin-bottom:10px;}

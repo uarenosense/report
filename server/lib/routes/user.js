@@ -104,7 +104,8 @@ module.exports.addRoutes = function(app){
                     var account = _map[item.id],
                         user = {
                             id:item.id,
-                            name:item.name
+                            name:item.name,
+                            role:item.role
                         };
                     if(account){
                         user.username = account.username;
