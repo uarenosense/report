@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <h3 class="modal-title">新增组员</h3>
+</div>
+<div class="modal-body">
+    <form>
+        <div class="input-group">
+            <input ng-model="keyword" type="text" class="form-control" placeholder="搜索">
+                    <span class="input-group-btn">
+                        <button ng-click="search()" class="btn btn-default" type="button">Go!</button>
+                    </span>
+        </div>
+        <div ng-repeat="u in users" class="radio">
+            <label>
+                <input ng-model="$parent.selected" ng-value="u" type="radio" name="optionsRadios">
+                {{u.name}}
+            </label>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">确定</button>
+    <button class="btn btn-warning" ng-click="cancel()">取消</button>
+</div>

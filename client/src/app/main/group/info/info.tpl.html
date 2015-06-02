@@ -1,0 +1,26 @@
+<form class="group-info-form form-inline">
+    <div class="form-group">
+        <label for="exampleInputName2">组名</label>
+        <input ng-model="group.name" type="text" class="form-control" id="exampleInputName2" placeholder="组名">
+    </div>
+    <button ng-click="save()" type="submit" class="btn btn-default">保存</button>
+</form>
+<div class="group-panel panel panel-default">
+    <div class="panel-heading">小组成员<button ng-click="add()" type="button" class="btn btn-default btn-xs">新增</button></div>
+    <div class="panel-body">
+        <table class="table table-hover">
+            <thead>
+            <th>#</th>
+            <th>姓名</th>
+            <th>操作</th>
+            </thead>
+            <tbody>
+            <tr ng-repeat="u in group.members">
+                <td>{{$index+1}}</td>
+                <td>{{u.name}}</td>
+                <td><button ng-click="delete(u)" type="button" class="btn btn-warning btn-xs">删除</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

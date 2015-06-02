@@ -1,0 +1,26 @@
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">用户列表</div>
+
+    <!-- Table -->
+    <table class="table table-hover">
+        <thead>
+        <th>#</th>
+        <th>用户名</th>
+        <th>姓名</th>
+        <th>组长</th>
+        <th>操作</th>
+        </thead>
+        <tbody>
+        <tr ng-repeat="u in users">
+            <td>{{$index+1}}</td>
+            <td>{{u.username}}</td>
+            <td>{{u.name}}</td>
+            <td><input ng-change="updateRole(u)" ng-model="u.role" ng-true-value="'leader'" ng-false-value="'normal'" type="checkbox"/></td>
+            <td>
+                <button ng-click="delete(u)" type="button" class="btn btn-warning btn-xs">删除</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

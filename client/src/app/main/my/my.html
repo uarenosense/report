@@ -1,0 +1,30 @@
+<div class="panel panel-default panel-report">
+    <!-- Default panel contents -->
+    <div class="panel-heading">日报列表<button ng-click="add()" type="button" class="btn btn-default btn-xs">写日报</button></div>
+
+    <!-- Table -->
+    <table class="table table-hover">
+        <thead>
+        <th>#</th>
+        <th>日期</th>
+        <th>内容</th>
+        <th>操作</th>
+        </thead>
+        <tbody>
+        <tr ng-repeat="r in reports">
+            <td>{{$index+1}}</td>
+            <td>{{r.time|date:'yyyy-MM-dd'}}</td>
+            <td>
+                <ol>
+                    <li ng-repeat="t in r.tasks">{{t.content}} ({{t.time}}h)</li>
+                </ol>
+            </td>
+            <td>
+                <button ng-click="send(r)" type="button" class="btn btn-primary btn-xs">发送</button>
+                <button ng-click="edit(r)" type="button" class="btn btn-default btn-xs">编辑</button>
+                <button ng-click="delete($index)" type="button" class="btn btn-warning btn-xs">删除</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
