@@ -2,7 +2,7 @@ var path = require('path');
 module.exports = {
     server:{
         staticUrl:'/static',
-        distFolder:path.resolve(__dirname, '../client/src'),
+        distFolder:path.resolve(__dirname, '../client/dist'),
         listenPort:8000,
         secret:'REPORT_U'
     },
