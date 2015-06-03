@@ -1,3 +1,3 @@
-angular.module('app', [])
-    .controller('groupReport', ['$scope', function($scope){
+angular.module('app.group.report', [])
+    .controller('GroupReport', ['$scope', function($scope){
     }]);

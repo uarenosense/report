@@ -1,4 +1,4 @@
-angular.module('app', [])
+angular.module('app.my', [])
     .controller('addReport', ['$scope', '$modalInstance', 'report',function($scope, $modalInstance, report){
         $scope.report = report||{tasks:[]};
         $scope.timeToggled = function(selected){
@@ -42,7 +42,7 @@ angular.module('app', [])
             $scope.selected = item;
         };
     })
-    .controller('my', ['$scope', '$http', '$modal',function($scope, $http, $modal){
+    .controller('My', ['$scope', '$http', '$modal',function($scope, $http, $modal){
         $scope.reports = [];
         $http.get('/user/report/list')
             .success(function(data){

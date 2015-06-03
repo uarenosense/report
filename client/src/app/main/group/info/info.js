@@ -1,4 +1,4 @@
-angular.module('app', [])
+angular.module('app.group.info', [])
     .controller('addMember', ['$scope', '$modalInstance', '$http',function($scope, $modalInstance, $http){
         $scope.search = function(){
             $http.get('/user/search?name='+$scope.keyword)

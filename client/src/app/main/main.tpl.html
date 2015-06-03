@@ -1,0 +1,17 @@
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">日报管理系统</a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul ng-controller="tab" class="nav navbar-nav">
+                    <li ng-class="{active:isActive('m/my')}"><a ui-sref="main.my">我的日报</a></li>
+                    <li ng-class="{active:isActive('m/group')}"><a ui-sref="main.group.report">小组管理</a></li>
+                    <li ng-class="{active:isActive('m/account')}"><a ui-sref="main.account">账号管理</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div ui-view></div>
+</div>

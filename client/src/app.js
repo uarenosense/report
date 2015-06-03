@@ -5,8 +5,14 @@ angular.module('app', [
     'templates.app',
     'templates.common',
     'app.login',
-    'app.register'])
+    'app.register',
+    'app.account',
+    'app.group.info',
+    'app.group.report',
+    'app.my'
+])
     .config(['$stateProvider', '$urlRouterProvider',function($stateProvider, $urlRouterProvider){
+        $urlRouterProvider.otherwise("/m/my");
         $stateProvider
             .state('login', {
                 url:'/login',
@@ -24,7 +30,30 @@ angular.module('app', [
             })
             .state('main', {
                 url:'/m',
-                templateUrl:''
+                templateUrl:'main/main.tpl.html'
+            })
+            .state('main.account', {
+                url:'/account',
+                templateUrl:'main/account/account.tpl.html',
+                controller:'Account'
+            })
+            .state('main.group', {
+                url:'/group',
+                templateUrl:'main/group/group.tpl.html'
+            })
+            .state('main.group.report', {
+                url:'/report',
+                templateUrl:'main/group/report/report.tpl.html'
+            })
+            .state('main.group.info', {
+                url:'/info',
+                templateUrl:'main/group/info/info.tpl.html',
+                controller:'GroupInfo'
+            })
+            .state('main.my', {
+                url:'/my',
+                templateUrl:'main/my/my.tpl.html',
+                controller:'My'
             });
 
     }]);

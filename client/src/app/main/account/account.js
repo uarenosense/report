@@ -1,4 +1,4 @@
-angular.module('app', [])
+angular.module('app.account', [])
     .controller('Account', ['$scope', '$http', function($scope, $http){
         $http.get('/user/list')
             .success(function(data){

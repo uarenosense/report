@@ -1,0 +1,5 @@
+<ul ng-controller="tab" class="group-nav nav nav-tabs" role="tablist">
+    <li ng-class="{active:isActive('report')}"><a ui-sref="main.group.report">小组日报</a></li>
+    <li ng-class="{active:isActive('info')}"><a ui-sref="main.group.info">信息管理</a></li>
+</ul>
+<div ui-view></div>
