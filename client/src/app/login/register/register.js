@@ -1,26 +1,23 @@
-angular.module('app', [])
+angular.module('app.register', [])
     .controller('Register', ['$scope', '$http', function($scope, $http){
         $scope.submit = function(){
             if($scope.form.$invalid) return;
-            if($scope.tab=='login'){
-                $http.post('/user/login', $scope.data)
-                    .success(function(result){
-                        if(result.code==200){
-                            location.href = '/static/index.html';
-                        }else{
-                            alert(result.message||'登录失败');
-                        }
-                    });
-            }else{
-                $http.post('/user/register', $scope.data)
-                    .success(function(result){
-                        if(result.code==200){
-                            location.href = '/static/index.html';
-                        }else{
-                            alert(result.message||'注册失败失败');
-                        }
-                    });
-            }
+            var data = angular.extend({}, $scope.data);
+            data.password = md5(data.password);
+            $scope.loading = true;
+            $scope.errorMessage = '';
+            $http.post('/user/register', data)
+                .success(function(result){
+                    $scope.loading = false;
+                    if(result.code==200){
+                        location.hash = '/my';
+                    }else{
+                        $scope.errorMessage = result.message||'注册失败';
+                    }
+                })
+                .error(function(){
+                    $scope.errorMessage = '注册失败';
+                });
 
         }
     }]);

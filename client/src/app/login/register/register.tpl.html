@@ -1,9 +1,10 @@
 <form name="form" class="form-signin" ng-submit="submit()">
-    <input ng-model-options="{ updateOn: 'blur' }" ng-model="data.username" required email class="form-control" placeholder="邮箱">
-    <span name="username" ng-show="form.username.$error.required">请输入邮箱</span>
-    <span ng-show="form.username.$error.email">邮箱格式不正确</span>
-    <input ng-model-options="{ updateOn: 'blur' }" name="password" ng-model="data.password" type="password" class="form-control" placeholder="密码">
-    <span ng-show="form.password.$error.required">请输入密码</span>
-    <input name="name" ng-model="data.name" type="text" class="form-control" placeholder="姓名" required="">
+    <input name="username" ng-model="data.username" required type="email" class="form-control" placeholder="邮箱">
+    <span class="error-text" ng-show="form.username.$error.required">请输入邮箱</span>
+    <span class="error-text" ng-show="form.username.$error.email">邮箱格式不正确</span>
+    <input name="password" required ng-model="data.password" type="password" class="form-control" placeholder="密码">
+    <span class="error-text" ng-show="form.password.$error.required">请输入密码</span>
+    <input name="name" required ng-model="data.name" type="text" class="form-control" placeholder="姓名" required="">
+    <p class="error-text" ng-show="form.name.$error.required">请输入姓名</p>
     <input ng-click="submit()" type="button" class="btn btn-lg btn-primary btn-block" value="注册">
 </form>

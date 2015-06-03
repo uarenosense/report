@@ -35,7 +35,7 @@ module.exports.addRoutes = function(app){
     /**
      * 退出
      */
-    app.post('/user/logout', function(req, res){
+    app.get('/user/logout', function(req, res){
         req.logout();
         res.json({code:200});
     });
@@ -76,6 +76,29 @@ module.exports.addRoutes = function(app){
             }
 
         }
+    });
+    /**
+     * 退出
+     */
+    app.post('/user/logout', function(req, res){
+        req.logout();
+        res.json({code:200});
+    });
+    /**
+     * 获取登录用户
+     */
+    app.get('/user/login/get', security.loginRequire,function(req, res, next){
+        User.findById(req.user.userId).exec()
+            .then(function(user){
+                res.json({
+                    code:200,
+                    user:user
+                });
+            }, function(){
+                res.json({
+                    code:500
+                });
+            });
     });
     /**
      * 获取用户列表

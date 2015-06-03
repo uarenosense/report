@@ -31,10 +31,6 @@ module.exports = function(grunt){
         pkg: grunt.file.readJSON('package.json'),
         clean: ['<%= distdir %>/*'],
         copy:{
-            jquery:{
-                src:['bower_components/jquery/dist/jquery.js'],
-                dest:'<%= distdir %>/jquery.js'
-            },
             bootstrap:{
                 expand:true,
                 cwd:'bower_components/bootstrap/dist',
@@ -58,6 +54,13 @@ module.exports = function(grunt){
             }
         },
         concat:{
+            jquery:{
+                src:[
+                    'bower_components/jquery/dist/jquery.js',
+                    'bower_components/JavaScript-MD5/js/md5.js'
+                ],
+                dest:'<%= distdir %>/jquery.js'
+            },
             angular: {
                 src:[
                     'bower_components/angular/angular.js',

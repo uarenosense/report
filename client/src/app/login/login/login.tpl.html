@@ -1,13 +1,14 @@
 <form name="form" class="form-signin">
-    <input name="username" ng-model="data.username" ng-model-options="{ updateOn: 'blur' }" required type="email" class="form-control" placeholder="邮箱">
-    <span ng-show="(form.$dirty||form.username.$dirty)&&form.username.$error.required">请输入邮箱</span>
-    <span ng-show="form.username.$dirty&&form.username.$error.email">邮箱格式不正确</span>
-    <input ng-model-options="{ updateOn: 'blur' }" required name="password" ng-model="data.password" minlength="6" type="password" class="form-control" placeholder="密码">
-    <span ng-show="(form.$dirty||form.password.$dirty)&&form.password.$error.required">请输入密码</span>
+    <input name="username" ng-model="data.username" required type="email" class="form-control" placeholder="邮箱">
+    <span class="error-text" ng-show="form.username.$error.required">请输入邮箱</span>
+    <span class="error-text" ng-show="form.username.$error.email">邮箱格式不正确</span>
+    <input required name="password" ng-model="data.password" minlength="6" type="password" class="form-control" placeholder="密码">
+    <span class="error-text" ng-show="form.password.$error.required">请输入密码</span>
     <div class="checkbox">
         <label>
             <input name="remember" ng-model="data.remember" ng-true-value="true" ng-false-value="false" type="checkbox" value="true">记住我
         </label>
     </div>
+    <p class="error-text" ng-show="!!errorMessage">{{errorMessage}}</p>
     <input ng-click="submit()" type="button" class="btn btn-lg btn-primary btn-block" value="登录">
 </form>

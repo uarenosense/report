@@ -1,2 +1,11 @@
-<h2>登录</h2>
-<div ui-view></div>
+<div class="container container-login">
+    <ul class="nav nav-tabs" ng-controller="tab">
+        <li role="presentation" ng-class="{active:isActive('login/login')}"><a ui-sref="login.login">登录</a></li>
+        <li role="presentation" ng-class="{active:isActive('login/register')}"><a ui-sref="login.register">注册</a></li>
+    </ul>
+    <div class="panel panel-default panel-login">
+        <div ui-view class="panel-body">
+
+        </div>
+    </div>
+</div>

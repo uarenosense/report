@@ -11,6 +11,7 @@
     "ui-bootstrap": "~0.13.0",
     "angular-ui-router": "~0.2.15",
     "seajs": "~3.0.0",
-    "requirejs": "~2.1.18"
+    "requirejs": "~2.1.18",
+    "JavaScript-MD5": "~1.1.0"
   }
 }

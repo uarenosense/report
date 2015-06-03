@@ -7,8 +7,8 @@
         <link rel="stylesheet" href="<%- c %>">
     <% }); %>
 </head>
-<body ng-app="app">
-    <div ui-view></div>
+<body>
+    <div ui-view>加载中...</div>
     <% _.forEach(js, function(j) { %>
     <script src="<%- j %>"></script>
     <% }); %>
