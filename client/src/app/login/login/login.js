@@ -1,6 +1,8 @@
 angular.module('app.login', [])
     .controller('Login', ['$scope', '$http', function($scope, $http){
-        $scope.submit = function(){
+        $scope.data = {remember:true};
+        $scope.submit = function(ev){
+            ev.preventDefault();
             $scope.form.$setDirty();
             if($scope.form.$invalid) return;
             var data = angular.extend({}, $scope.data);
@@ -12,6 +14,7 @@ angular.module('app.login', [])
                     $scope.loading = false;
                     if(result.code==200){
                         location.hash = '/my';
+                        window.USER = result.user;
                     }else{
                         $scope.errorMessage = result.message||'登录失败';
                     }

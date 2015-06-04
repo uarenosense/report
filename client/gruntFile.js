@@ -46,6 +46,12 @@ module.exports = function(grunt){
                 src:['**/*.css'],
                 dest:'<%= distdir %>'
             },
+            img:{
+                expand:true,
+                cwd:'src',
+                src:['img/**'],
+                dest:'<%= distdir %>'
+            },
             js:{
                 expand:true,
                 cwd:'src',

@@ -1,6 +1,10 @@
-.container-login{width:350px;margin-top: 50px;}
 .error-text{color:#a94442;}
+.loading{width:100px;margin:20px auto;}
+.loading i{float:left;width:16px;height:16px;margin:2px 5px 0;background:url(../img/loading.gif);}
+.container-login{width:350px;margin-top: 50px;}
+
 .panel-login{margin-top:-1px;border-radius:0 5px 5px 5px;}
+
 .form-signin {max-width: 330px;padding: 15px;margin: 0 auto;}
 .form-signin .form-signin-heading, .form-signin .checkbox {margin-bottom: 10px;}
 .form-signin .checkbox {font-weight: normal;}
@@ -15,5 +19,4 @@
 .edit-report .input-content{width:350px;}
 .edit-report .input-time{width:60px;}
 .edit-report .form-control{height:24px;}
-
 .edit-report .btn-group{margin-bottom:10px;}

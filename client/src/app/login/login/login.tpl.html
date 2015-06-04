@@ -10,5 +10,5 @@
         </label>
     </div>
     <p class="error-text" ng-show="!!errorMessage">{{errorMessage}}</p>
-    <input ng-click="submit()" type="button" class="btn btn-lg btn-primary btn-block" value="登录">
+    <button ng-click="submit($event)" ng-disabled="loading" class="btn btn-lg btn-primary btn-block">登录{{loading?'中...':''}}</button>
 </form>

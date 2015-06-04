@@ -7,7 +7,7 @@ var groupSchema = new Schema({
     members:[String]
 });
 //set option
-groupSchema.set('collection', 'group');
+groupSchema.set('collection', 'groups');
 groupSchema.set('toJSON', { getters: true, virtuals: true });
 
 module.exports = mongoose.model('Group', groupSchema);

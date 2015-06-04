@@ -15,6 +15,7 @@ module.exports.addRoutes = function(app){
                     if(error){
                         res.json({code:500});
                     }else{
+                        if(req.body.remember) req.sessionOptions.maxAge = 5*24*3600*100;
                         User.findById(account.userId, onFind);
                     }
                 });

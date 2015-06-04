@@ -6,7 +6,7 @@ var userSchema = new Schema({
     role:{ type: String, default: 'normal' ,enum: ['normal', 'leader']}
 });
 //set option
-userSchema.set('collection', 'user');
+userSchema.set('collection', 'users');
 userSchema.set('_id', false);
 userSchema.set('toJSON', { getters: true, virtuals: true });
 /**

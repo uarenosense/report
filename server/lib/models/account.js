@@ -5,7 +5,7 @@ var accountSchema = new Schema({
     userId:String
 });
 //set option
-accountSchema.set('collection','account');
+accountSchema.set('collection','accounts');
 //plugin
 accountSchema.plugin(passportLocalMongoose);
 //exports

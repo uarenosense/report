@@ -8,7 +8,7 @@ var reportSchema = new Schema({
     tasks:[{content:String, time:Number}]
 });
 //set option
-reportSchema.set('collection', 'report');
+reportSchema.set('collection', 'reports');
 reportSchema.set('toJSON', { getters: true, virtuals: true });
 
 module.exports = mongoose.model('Report', reportSchema);

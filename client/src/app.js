@@ -9,10 +9,20 @@ angular.module('app', [
     'app.account',
     'app.group.info',
     'app.group.report',
-    'app.my'
+    'app.my',
+    'app.main'
 ])
     .config(['$stateProvider', '$urlRouterProvider',function($stateProvider, $urlRouterProvider){
-        $urlRouterProvider.otherwise("/m/my");
+        $urlRouterProvider
+            .when('/login/login', function(){
+                if(window.USER) return '/m/my';
+                else return null;
+            })
+            .when('/login/register', function(){
+                if(window.USER) return '/m/my';
+                else return null;
+            })
+            .otherwise("/m/my");
         $stateProvider
             .state('login', {
                 url:'/login',
@@ -30,7 +40,8 @@ angular.module('app', [
             })
             .state('main', {
                 url:'/m',
-                templateUrl:'main/main.tpl.html'
+                templateUrl:'main/main.tpl.html',
+                controller:'Main'
             })
             .state('main.account', {
                 url:'/account',
@@ -60,6 +71,7 @@ angular.module('app', [
 jQuery.get('/user/login/get')
     .success(function(data){
         if(data.code!=200) location.hash = '/login/login';
+        window.USER = data.user;
         angular.bootstrap(document.body, ['app']);
     })
     .error(function(){

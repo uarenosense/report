@@ -10,6 +10,6 @@ module.exports = {
         url:'mongodb://localhost:27017/report'
     },
     security:{
-        admins:['hzliwei@126.com']
+        admins:['lwadmin@163.com']
     }
 };
