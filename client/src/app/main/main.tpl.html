@@ -7,8 +7,8 @@
             <div class="collapse navbar-collapse">
                 <ul ng-controller="tab" class="nav navbar-nav">
                     <li ng-class="{active:isActive('m/my')}"><a ui-sref="main.my">我的日报</a></li>
-                    <li ng-class="{active:isActive('m/group')}"><a ui-sref="main.group.report">小组管理</a></li>
-                    <li ng-class="{active:isActive('m/account')}"><a ui-sref="main.account">账号管理</a></li>
+                    <li ng-if="user.role=='leader'" ng-class="{active:isActive('m/group')}"><a ui-sref="main.group.report">小组管理</a></li>
+                    <li ng-if="user.admin" ng-class="{active:isActive('m/account')}"><a ui-sref="main.account">账号管理</a></li>
                 </ul>
                 <p class="navbar-text navbar-right">{{user.name}} | <a ng-click="logout()" href="javascript:;" class="navbar-link">退出</a></p>
             </div>

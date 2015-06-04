@@ -8,9 +8,11 @@ module.exports.addRoutes = function(app){
      * 用户登录
      */
     app.post('/user/login',function(req, res, next){
+        var accountTmp;
         passport.authenticate('local', onAuth)(req, res, next);
         function onAuth(error, account, info){
             if(account){
+                accountTmp = account;
                 req.login(account, function(error){
                     if(error){
                         res.json({code:500});
@@ -29,7 +31,9 @@ module.exports.addRoutes = function(app){
             if(error){
                 res.json({code:500});
             }else{
-                res.json({code:200, user:user});
+                var userObj = user.toObject();
+                userObj.admin = accountTmp.admin;
+                res.json({code:200, user:userObj});
             }
         }
     });
@@ -71,7 +75,9 @@ module.exports.addRoutes = function(app){
                     if(error){
                         res.json({code:500});
                     }else{
-                        res.json({code:200,user:user});
+                        var userObj = user.toObject();
+                        userObj.admin = account.admin;
+                        res.json({code:200,user:userObj});
                     }
                 });
             }
@@ -91,9 +97,11 @@ module.exports.addRoutes = function(app){
     app.get('/user/login/get', security.loginRequire,function(req, res, next){
         User.findById(req.user.userId).exec()
             .then(function(user){
+                var userObj = user.toObject();
+                userObj.admin = req.user.admin;
                 res.json({
                     code:200,
-                    user:user
+                    user:userObj
                 });
             }, function(){
                 res.json({
