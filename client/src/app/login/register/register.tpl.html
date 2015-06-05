@@ -6,5 +6,6 @@
     <span class="error-text" ng-show="form.password.$error.required">请输入密码</span>
     <input name="name" required ng-model="data.name" type="text" class="form-control" placeholder="姓名" required="">
     <p class="error-text" ng-show="form.name.$error.required">请输入姓名</p>
+    <p class="error-text" ng-show="!!errorMessage">{{errorMessage}}</p>
     <button ng-click="submit($event)" ng-click="submit()" ng-disabled="loading" class="btn btn-lg btn-primary btn-block">注册{{loading?'中...':''}}</button>
 </form>

@@ -65,7 +65,7 @@ module.exports.addRoutes = function(app){
             };
             function onRegister(error, account){
                 if(error){
-                    res.json({code:500});
+                    res.json({code:500, message:error.message.indexOf('userExistsError')!=-1?'该用户已注册':''});
                 }else{
                     passport.authenticate('local', onAuth)(req, res, next);
                 }

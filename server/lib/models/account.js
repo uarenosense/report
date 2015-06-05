@@ -8,7 +8,7 @@ var accountSchema = new Schema({
 //set option
 accountSchema.set('collection','accounts');
 //plugin
-accountSchema.plugin(passportLocalMongoose);
+accountSchema.plugin(passportLocalMongoose, {userExistsError:'userExistsError'});
 accountSchema.virtual('admin').get(function(){
     return config.security.admins.indexOf(this.username)!=-1;
 });
