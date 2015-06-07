@@ -22,6 +22,7 @@ angular.module('app.account', ['app.directives.list.box'])
         };
 
         $scope.delete = function(user){
+            if(!window.confirm('确定删除用户？')) return;
             $http.get('/user/delete?id='+user.id)
                 .success(function(data){
                     if(data.code==200){
