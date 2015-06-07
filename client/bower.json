@@ -12,6 +12,7 @@
     "angular-ui-router": "~0.2.15",
     "seajs": "~3.0.0",
     "requirejs": "~2.1.18",
-    "JavaScript-MD5": "~1.1.0"
+    "JavaScript-MD5": "~1.1.0",
+    "angular-sanitize": "~1.4.0"
   }
 }

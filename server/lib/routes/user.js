@@ -53,19 +53,19 @@ module.exports.addRoutes = function(app){
             res.json({code:'400'});
         }else{
             var user = new User({name:_param.name});
-            user.save(onSave)
+            _param.userId = user.id;
+            Account.register(_param, _param.password, onRegister);
             ////////////////////functions///////////////////////
-            function onSave(error){
-                if(error){
-                    req.json({code:500});
-                }else{
-                    _param.userId = user.get('id');
-                    Account.register(_param, _param.password, onRegister);
-                }
-            };
             function onRegister(error, account){
                 if(error){
                     res.json({code:500, message:error.message.indexOf('userExistsError')!=-1?'该用户已注册':''});
+                }else{
+                    user.save(onSave);
+                }
+            };
+            function onSave(error){
+                if(error){
+                    req.json({code:500});
                 }else{
                     passport.authenticate('local', onAuth)(req, res, next);
                 }
@@ -144,6 +144,7 @@ module.exports.addRoutes = function(app){
                     }
                     return user;
                 });
+                result.code = 200;
                 res.json(result);
             })
             .fail(function(error){

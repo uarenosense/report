@@ -1,9 +1,7 @@
 angular.module('app', [
     'ui.router',
-    'ui.bootstrap',
     'app.controllers',
     'templates.app',
-    'templates.common',
     'app.login',
     'app.register',
     'app.account',

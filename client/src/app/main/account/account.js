@@ -1,9 +1,26 @@
-angular.module('app.account', [])
+angular.module('app.account', ['app.directives.list.box'])
     .controller('Account', ['$scope', '$http', function($scope, $http){
-        $http.get('/user/list')
-            .success(function(data){
-                $scope.users = data.users;
-            });
+        $scope.pageChange = function(data){
+            $scope.listBox.setState('loading');
+            $http.get('/user/list?'+jQuery.param(data))
+                .success(function(data){
+                    if(data.code==200){
+                        if(data.users&&data.users.length){
+                            $scope.listBox.setState('success');
+                            $scope.users = data.users;
+                            $scope.listBox.setTotal(data.count);
+                        }else{
+                            $scope.listBox.setState('empty');
+                        }
+                    }else{
+                        $scope.listBox.setState('error');
+                    }
+                })
+                .error(function(){
+                    $scope.listBox.setState('error');
+                });
+        };
+
         $scope.delete = function(user){
             $http.get('/user/delete?id='+user.id)
                 .success(function(data){
