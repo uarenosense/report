@@ -2,22 +2,28 @@ var Group = require('../models/group.js');
 var User = require('../models/user.js');
 var Report = require('../models/report.js');
 var security = require('../security.js');
+var q = require('q');
 module.exports.addRoutes = function(app){
     /**
      * 获取用户日报
      */
     app.get('/user/report/list', security.loginRequire, function(req, res){
-        Report.find({userId:req.user.userId}).sort({time:'desc'}).exec()
-            .then(function(list){
-                res.json({
-                    code:200,
-                    reports:list
-                });
-            }, function(){
-                res.json({
-                    code:500
-                })
+        var query = req.query;
+        q.all([
+            Report.count({userId:req.user.userId}).exec(),
+            Report.find({userId:req.user.userId}).sort({time:'desc'}).skip(query.offset||0).limit(query.limit||20).exec()
+        ])
+        .spread(function(count, list){
+            res.json({
+                code:200,
+                count:count,
+                reports:list
             });
+        }, function(){
+            res.json({
+                code:500
+            })
+        });
     });
     /**
      * 添加用户日报
@@ -52,13 +58,20 @@ module.exports.addRoutes = function(app){
     /**
      * 发送用户日报
      */
-    app.get('/user/report/delete', security.loginRequire, function(req, res){
-        Report.findOneAndRemove({id:req.param.id})
+    app.get('/user/report/send', security.loginRequire, function(req, res){
+        var groupId;
+        User.findById(req.query.userId)
+            .then(function(user){
+                if(!user.groupId) throw Error();
+                groupId = user.groupId;
+                return Report.findByIdAndUpdate(req.query.id, {groupId:user.groupId}).exec();
+            })
             .then(function(report){
                 res.json({
-                    code:200
+                    code:200,
+                    groupId:groupId
                 });
-            },function(){
+            },function(error){
                 res.json({code:500});
             });
     });

@@ -1,9 +1,6 @@
-<div class="panel panel-default panel-report">
-    <!-- Default panel contents -->
-    <div class="panel-heading">日报列表<button ng-click="add()" type="button" class="btn btn-default btn-xs">写日报</button></div>
-
-    <!-- Table -->
-    <table class="table table-hover">
+<div class="add-report"><button ng-click="add()" type="button" class="btn btn-primary btn-sm">写日报</button></div>
+<list-box name="listBox" on-page-change="pageChange" limit="15">
+    <table class="table table-bordered table-hover">
         <thead>
         <th>#</th>
         <th>日期</th>
@@ -20,11 +17,14 @@
                 </ol>
             </td>
             <td>
-                <button ng-click="send(r)" type="button" class="btn btn-primary btn-xs">发送</button>
-                <button ng-click="edit(r)" type="button" class="btn btn-default btn-xs">编辑</button>
-                <button ng-click="delete($index)" type="button" class="btn btn-warning btn-xs">删除</button>
+                <span ng-hide="r.groupId">
+                    <button ng-click="send(r)" type="button" class="btn btn-primary btn-xs">发送</button>
+                    <button ng-click="edit(r)" type="button" class="btn btn-default btn-xs">编辑</button>
+                    <button ng-click="delete($index)" type="button" class="btn btn-danger btn-xs">删除</button>
+                </span>
+                <span ng-show="r.groupId">已发送</span>
             </td>
         </tr>
         </tbody>
     </table>
-</div>
+</list-box>

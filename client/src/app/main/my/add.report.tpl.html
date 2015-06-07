@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">新增日报</h3>
+    <h3 class="modal-title">{{isAdd?'新增':'编辑'}}日报</h3>
 </div>
 <div class="modal-body edit-report">
     <div ng-controller="TimeDropdown" class="btn-group" dropdown on-toggle="timeToggled(selected)" is-open="status.isopen">
@@ -25,7 +25,7 @@
             <td>{{t.content}}</td>
             <td>{{t.time}}</td>
             <td>
-                <button ng-click="delete($index)" type="button" class="btn btn-warning btn-xs">删除</button>
+                <button ng-click="delete($index)" type="button" class="btn btn-danger btn-xs">删除</button>
             </td>
         </tr>
         <tr>

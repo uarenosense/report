@@ -1,6 +1,8 @@
-angular.module('app.my', [])
-    .controller('addReport', ['$scope', '$modalInstance', 'report',function($scope, $modalInstance, report){
+angular.module('app.my', ['app.directives.list.box'])
+    .controller('AddReport', ['$scope', '$modalInstance', 'report',function($scope, $modalInstance, report){
         $scope.report = report||{tasks:[]};
+        $scope.isAdd = !report;
+        $scope.report.time = $scope.report.time||+ new Date;
         $scope.timeToggled = function(selected){
             $scope.report.time = selected.time;
         };
@@ -44,17 +46,41 @@ angular.module('app.my', [])
     })
     .controller('My', ['$scope', '$http', '$modal',function($scope, $http, $modal){
         $scope.reports = [];
-        $http.get('/user/report/list')
-            .success(function(data){
-                if(data.code==200){
-                    $scope.reports = data.reports;
+
+        $scope.$watch('reports.length', function(length){
+            if($scope.listBox){
+                if(!length){
+                    $scope.listBox.setState('empty');
+                }else{
+                    $scope.listBox.setState();
                 }
-            });
+            }
+        });
+
+        $scope.pageChange = function(data){
+            $scope.listBox.setState('loading');
+            $http.get('/user/report/list?'+jQuery.param(data))
+                .success(function(data){
+                    if(data.code==200){
+                        if(data.reports&&data.reports.length){
+                            $scope.reports = data.reports;
+                            $scope.listBox.setState('success');
+                            $scope.listBox.setTotal(data.count);
+                        }
+                    }else{
+                        $scope.listBox.setState('error');
+                    }
+                })
+                .error(function(){
+                    $scope.listBox.setState('error');
+                });
+        };
+
         $scope.add = function(){
             var modalInstance = $modal.open({
                 animation: $scope.animationsEnabled,
-                templateUrl: 'add-report',
-                controller: 'addReport',
+                templateUrl: 'main/my/add.report.tpl.html',
+                controller: 'AddReport',
                 resolve:{
                     report:null
                 }
@@ -64,6 +90,7 @@ angular.module('app.my', [])
                     .success(function(data){
                         if(data.code==200){
                             report.id = data.id;
+                            report.userId = window.USER._id;
                             $scope.reports.unshift(report);
                         }
                     });
@@ -75,8 +102,8 @@ angular.module('app.my', [])
         $scope.edit = function(report){
             var modalInstance = $modal.open({
                 animation: $scope.animationsEnabled,
-                templateUrl: 'add-report',
-                controller: 'addReport',
+                templateUrl: 'main/my/add.report.tpl.html',
+                controller: 'AddReport',
                 resolve:{
                     report:function(){
                         return JSON.parse(JSON.stringify(report));
@@ -96,11 +123,22 @@ angular.module('app.my', [])
         };
 
         $scope.delete = function(index){
+            if(!window.confirm('确定删除日报？')) return;
             $http.get('/user/report/delete?id='+$scope.reports[index].id)
                 .success(function(data){
                     if(data.code==200){
                         $scope.reports.splice(index, 1);
                     }
                 });
+        };
+
+        $scope.send = function(report){
+            if(!window.confirm('确定发送日报？')) return;
+            $http.get('/user/report/send?'+jQuery.param({id:report.id, userId:report.userId}))
+                .success(function(data){
+                    if(data.code==200){
+                        report.groupId = data.groupId;
+                    }
+                })
         };
     }]);
