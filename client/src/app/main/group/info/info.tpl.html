@@ -8,19 +8,21 @@
 <div class="group-panel panel panel-default">
     <div class="panel-heading">小组成员<button ng-click="add()" type="button" class="btn btn-default btn-xs">新增</button></div>
     <div class="panel-body">
-        <table class="table table-hover">
-            <thead>
-            <th>#</th>
-            <th>姓名</th>
-            <th>操作</th>
-            </thead>
-            <tbody>
-            <tr ng-repeat="u in group.members">
-                <td>{{$index+1}}</td>
-                <td>{{u.name}}</td>
-                <td><button ng-click="delete(u)" type="button" class="btn btn-warning btn-xs">删除</button></td>
-            </tr>
-            </tbody>
-        </table>
+        <list-box name="listBox">
+            <table class="table table-hover">
+                <thead>
+                <th>#</th>
+                <th>姓名</th>
+                <th>操作</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="u in group.members">
+                    <td>{{$index+1}}</td>
+                    <td>{{u.name}}</td>
+                    <td><button ng-click="delete(u)" type="button" class="btn btn-danger btn-xs">删除</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </list-box>
     </div>
 </div>

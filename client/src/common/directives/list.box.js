@@ -43,16 +43,18 @@ angular.module('app.directives.list.box', ['templates.common', 'ui.bootstrap', '
                 ctrl.setLimit(limit);
                 ctrl.setPage(1);
                 ctrl.setTotal(0);
-                scope.pageChanged = function(){
-                    if(onPageChange){
+                if(onPageChange){
+                    scope.pageChanged = function(){
                         onPageChange({
                             page:scope.page||0,
                             offset:(scope.page-1)*scope.limit,
                             limit:scope.limit
                         });
-                    }
-                };
-                scope.pageChanged();
+                    };
+                    scope.pageChanged();
+                }else{
+                    scope.noPage = true;
+                }
             }
 
         }

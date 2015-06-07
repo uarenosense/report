@@ -17,17 +17,10 @@ module.exports.addRoutes = function(app){
                         })
                         .then(function(group){
                             groupInfo = group;
-                            return User.find({'_id':{'$in':group.members}}).exec();
+                            return User.find({'groupId':group.id}).exec();
                         })
                         .then(function(members){
-                            var list,query = {};
-                            members.forEach(function(item){
-                                query[item.id] = item;
-                            });
-                            list = groupInfo.members.map(function(item){
-                                return query[item];
-                            });
-                            res.json({code:200, group:{id:groupInfo.id, name:groupInfo.name, members:list}});
+                            res.json({code:200, group:{id:groupInfo.id, name:groupInfo.name, members:members}});
                         }, function(){
                             res.json({code:500});
                         });
@@ -59,17 +52,13 @@ module.exports.addRoutes = function(app){
             });
     });
     /**
-     * 更新小组信息
+     * 添加小组成员
      */
     app.get('/group/members/add', function(req, res){
         User.findById(req.user.userId).exec()
             .then(function(user){
                 if(user.role=='leader'){
-                    Group.findById(req.query.groupId).exec()
-                        .then(function(group){
-                            group.members.push(req.query.userId);
-                            return group.save();
-                        })
+                    User.findByIdAndUpdate(req.query.userId, {groupId:req.query.groupId}).exec()
                         .then(function(){
                             res.json({code:200});
                         },function(){
@@ -83,17 +72,13 @@ module.exports.addRoutes = function(app){
             });
     });
     /**
-     * 更新小组信息
+     * 删除小组成员
      */
     app.get('/group/members/delete', function(req, res){
         User.findById(req.user.userId).exec()
             .then(function(user){
                 if(user.role=='leader'){
-                    Group.findById(req.query.groupId).exec()
-                        .then(function(group){
-                            group.members.pull(req.query.userId);
-                            return group.save();
-                        })
+                    User.findByIdAndUpdate(req.query.userId, {groupId:''}).exec()
                         .then(function(){
                             res.json({code:200});
                         },function(){

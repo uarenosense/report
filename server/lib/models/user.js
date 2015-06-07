@@ -3,7 +3,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var userSchema = new Schema({
     name:String,
-    role:{ type: String, default: 'normal' ,enum: ['normal', 'leader']}
+    role:{ type: String, default: 'normal' ,enum: ['normal', 'leader']},
+    groupId:String
 });
 //set option
 userSchema.set('collection', 'users');

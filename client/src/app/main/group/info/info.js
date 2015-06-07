@@ -1,5 +1,5 @@
-angular.module('app.group.info', [])
-    .controller('addMember', ['$scope', '$modalInstance', '$http',function($scope, $modalInstance, $http){
+angular.module('app.group.info', ['app.directives.list.box'])
+    .controller('AddMember', ['$scope', '$modalInstance', '$http',function($scope, $modalInstance, $http){
         $scope.search = function(){
             $http.get('/user/search?name='+$scope.keyword)
                 .success(function(data){
@@ -21,6 +21,18 @@ angular.module('app.group.info', [])
             .success(function(_data){
                 $scope.group = _data.group;
             });
+
+        $scope.$watchCollection('group.members', function(members){
+            if($scope.listBox){
+                if(!(members&&members.length)){
+                    $scope.listBox.setState('empty');
+                }else{
+                    $scope.listBox.setState();
+                }
+            }
+
+        });
+
         $scope.save = function(){
             $http.post('/group/info/update', $scope.group)
                 .success(function(data){
@@ -29,11 +41,12 @@ angular.module('app.group.info', [])
                     }
                 });
         };
+
         $scope.add = function(){
             var modalInstance = $modal.open({
                 animation: $scope.animationsEnabled,
-                templateUrl: 'add-member',
-                controller: 'addMember'
+                templateUrl: 'main/group/info/add.member.tpl.html',
+                controller: 'AddMember'
             });
             modalInstance.result.then(function (selectedItem) {
                 $http.get('/group/members/add?'+jQuery.param({groupId:$scope.group.id, userId:selectedItem.id}))
@@ -46,7 +59,9 @@ angular.module('app.group.info', [])
                 console.log('dismissed');
             });
         };
+
         $scope.delete = function(user){
+            if(!window.confirm('确定删除组员？')) return;
             $http.get('/group/members/delete?'+jQuery.param({groupId:$scope.group.id, userId:user.id}))
                 .success(function(data){
                     if(data.code==200){

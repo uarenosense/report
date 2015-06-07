@@ -1,5 +1,5 @@
 <div ng-show="stateTip" ng-bind-html="stateTip"></div>
 <div ng-hide="stateTip" ng-transclude></div>
-<div class="page-box">
+<div ng-hide="noPage" class="page-box">
     <pagination ng-hide="stateTip" total-items="total" ng-model="page" max-size="8" rotate="false" items-per-page="limit" ng-change="pageChanged()" class="pagination-sm"></pagination>
 </div>

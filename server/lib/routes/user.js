@@ -28,7 +28,7 @@ module.exports.addRoutes = function(app){
             }
         };
         function onFind(error, user){
-            if(error){
+            if(error||!user){
                 res.json({code:500});
             }else{
                 var userObj = user.toObject();
@@ -155,7 +155,7 @@ module.exports.addRoutes = function(app){
     /**
      * 获取用户列表
      */
-    app.get('/user/search', security.adminRequire, function(req, res){
+    app.get('/user/search', security.loginRequire, function(req, res){
         var query = req.query,
             result = {};
         User.find({name:{$regex:query.name}}).exec()
