@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var reportSchema = new Schema({
     userId:String,
+    day:String,
     time:Number,
     groupId:String,
     tasks:[{content:String, time:Number}]

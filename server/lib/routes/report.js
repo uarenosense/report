@@ -37,6 +37,20 @@ module.exports.addRoutes = function(app){
                     code:200,
                     id:report.id
                 });
+            },function(error){
+                var emap = {11000:'当天日报已存在'};
+                res.json({code:500,message:emap[error.code]});
+            });
+    });
+    /**
+     * 删除用户日报
+     */
+    app.get('/user/report/delete', security.loginRequire, function(req, res){
+        Report.findByIdAndRemove(req.query.id).exec()
+            .then(function(){
+                res.json({
+                    code:200
+                });
             },function(){
                 res.json({code:500});
             });
@@ -73,6 +87,40 @@ module.exports.addRoutes = function(app){
                 });
             },function(error){
                 res.json({code:500});
+            });
+    });
+    /**
+     * 获取小组日报
+     */
+    app.get('/group/report/list', security.loginRequire, function(req, res){
+        var query = req.query;
+        User.findById(req.user.userId).exec()
+            .then(function(user){
+                if(user.role=='leader'){
+                    Group.findOne({leader:user.id}).exec()
+                        .then(function(group){
+                            return Report.aggregate()
+                                //.project({id:1, userId:1, day:1, tasks:1, groupId:1})
+                                .match({groupId:group.id})
+                                .group({_id:'$day', reports:{$push:'$$ROOT'}})
+                                .sort({time:'desc'})
+                                .exec()
+                        })
+                        .then(function(list){
+                            res.json({
+                                code:200,
+                                reports:list
+                            });
+                        }, function(){
+                            res.json({
+                                code:500
+                            });
+                        });
+                }else{
+                    res.json({code:401, message:'不是组长'})
+                }
+            }, function(){
+                res.json({code:500})
             });
     });
 };

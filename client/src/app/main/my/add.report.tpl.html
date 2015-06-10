@@ -2,7 +2,7 @@
     <h3 class="modal-title">{{isAdd?'新增':'编辑'}}日报</h3>
 </div>
 <div class="modal-body edit-report">
-    <div ng-controller="TimeDropdown" class="btn-group" dropdown on-toggle="timeToggled(selected)" is-open="status.isopen">
+    <div ng-show="isAdd" ng-controller="TimeDropdown" class="btn-group" dropdown on-toggle="timeToggled(selected)" is-open="status.isopen">
         <button type="button" class="btn btn-default btn-xs dropdown-toggle" dropdown-toggle>
             {{selected.text}} <span class="caret"></span>
         </button>
@@ -12,6 +12,7 @@
             </li>
         </ul>
     </div>
+    <div class="day" ng-hide="isAdd">{{report.time|date:'yyyy-MM-dd'}}日报：</div>
     <table class="table table-bordered">
         <thead>
         <th width="20">#</th>

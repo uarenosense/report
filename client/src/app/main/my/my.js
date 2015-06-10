@@ -44,7 +44,7 @@ angular.module('app.my', ['app.directives.list.box'])
             $scope.selected = item;
         };
     })
-    .controller('My', ['$scope', '$http', '$modal',function($scope, $http, $modal){
+    .controller('My', ['$scope', '$http', '$modal', '$filter', function($scope, $http, $modal, $filter){
         $scope.reports = [];
 
         $scope.$watch('reports.length', function(length){
@@ -86,12 +86,15 @@ angular.module('app.my', ['app.directives.list.box'])
                 }
             });
             modalInstance.result.then(function (report) {
+                report.day = $filter('date')(report.time, 'yyyy-MM-dd');
                 $http.post('/user/report/add', report)
                     .success(function(data){
                         if(data.code==200){
                             report.id = data.id;
                             report.userId = window.USER._id;
                             $scope.reports.unshift(report);
+                        }else{
+                            alert(data.message||'添加失败');
                         }
                     });
             }, function () {
