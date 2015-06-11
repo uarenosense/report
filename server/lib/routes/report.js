@@ -100,18 +100,29 @@ module.exports.addRoutes = function(app){
                     Group.findOne({leader:user.id}).exec()
                         .then(function(group){
                             return Report.aggregate()
-                                //.project({id:1, userId:1, day:1, tasks:1, groupId:1})
                                 .match({groupId:group.id})
                                 .group({_id:'$day', reports:{$push:'$$ROOT'}})
                                 .sort({time:'desc'})
-                                .exec()
+                                .skip(parseInt(query.offset))
+                                .limit(parseInt(query.limit))
+                                .exec();
                         })
                         .then(function(list){
-                            res.json({
-                                code:200,
-                                reports:list
-                            });
-                        }, function(){
+                            Report.aggregate()
+                                .group({_id:'$day'})
+                                .exec()
+                                .then(function(count){
+                                    res.json({
+                                        code:200,
+                                        reports:list,
+                                        count:count.length
+                                    });
+
+                                }, function(error){
+                                    console.log(error.message);
+                                });
+                        }, function(error){
+                            console.log(error.message);
                             res.json({
                                 code:500
                             });

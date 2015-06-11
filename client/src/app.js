@@ -52,7 +52,8 @@ angular.module('app', [
             })
             .state('main.group.report', {
                 url:'/report',
-                templateUrl:'main/group/report/report.tpl.html'
+                templateUrl:'main/group/report/report.tpl.html',
+                controller:'GroupReport'
             })
             .state('main.group.info', {
                 url:'/info',

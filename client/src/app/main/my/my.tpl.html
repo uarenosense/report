@@ -13,7 +13,7 @@
             <td>{{r.time|date:'yyyy-MM-dd'}}</td>
             <td>
                 <ol>
-                    <li ng-repeat="t in r.tasks">{{t.content}} ({{t.time}}h)</li>
+                    <li ng-repeat="t in r.tasks">{{t.content}} <span class="task-time">({{t.time}}h)</span></li>
                 </ol>
             </td>
             <td>
