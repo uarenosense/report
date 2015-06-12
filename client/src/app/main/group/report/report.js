@@ -19,4 +19,15 @@ angular.module('app.group.report', ['app.directives.list.box'])
                 })
                 .error();
         };
+
+        $scope.sendBack = function(report){
+            $http.get('/user/report/sendBack?reportId='+report._id)
+                .success(function(data){
+                    if(data.code==200){
+                        report.tasks = null;
+                    }else{
+                        alert('操作失败');
+                    }
+                });
+        };
     }]);

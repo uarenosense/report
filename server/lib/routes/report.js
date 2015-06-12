@@ -99,13 +99,30 @@ module.exports.addRoutes = function(app){
                 if(user.role=='leader'){
                     Group.findOne({leader:user.id}).exec()
                         .then(function(group){
-                            return Report.aggregate()
+                            var promise1 =  Report.aggregate()
                                 .match({groupId:group.id})
-                                .group({_id:'$day', reports:{$push:'$$ROOT'}})
+                                .group({_id:'$day', time:{$first:'$time'},reports:{$push:'$$ROOT'}})
                                 .sort({time:'desc'})
                                 .skip(parseInt(query.offset))
                                 .limit(parseInt(query.limit))
                                 .exec();
+                            var promise2 = User.find({groupId:group.id})
+                                .exec();
+                            return q.all([promise1, promise2]).spread(function(groupReports, users){
+                                groupReports.forEach(function(dayReport){
+                                    var map = {};
+                                    dayReport.reports.forEach(function(report){
+                                        map[report.userId] = report;
+                                    });
+                                    dayReport.reports = users.map(function(user){
+                                        var report = map[user.id]||{};
+                                        report.user = user;
+                                        delete report.userId;
+                                        return report;
+                                    });
+                                });
+                                return groupReports;
+                            });
                         })
                         .then(function(list){
                             Report.aggregate()
@@ -132,6 +149,20 @@ module.exports.addRoutes = function(app){
                 }
             }, function(){
                 res.json({code:500})
+            });
+    });
+    /**
+     * 打回日报
+     */
+    app.get('/user/report/sendBack', security.loginRequire, function(req, res){
+        Report.findByIdAndUpdate(req.query.reportId, {groupId:''})
+            .then(function(report){
+                res.json({
+                    code:200
+                });
+            },function(error){
+                console.log(error.message);
+                res.json({code:500});
             });
     });
 };

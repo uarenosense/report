@@ -2,10 +2,10 @@
     <!-- Table -->
     <table class="table table-bordered table-hover">
         <thead>
-        <th width="40">#</th>
-        <th width="120">日期</th>
-        <th>内容</th>
-        <th width="100">操作</th>
+            <th width="40">#</th>
+            <th width="120">日期</th>
+            <th>内容</th>
+            <th width="100">操作</th>
         </thead>
         <tbody>
         <tr ng-repeat="gr in reports">
@@ -13,7 +13,7 @@
             <td>{{gr._id}}</td>
             <td>
                 <dl ng-repeat="r in gr.reports">
-                    <dt>{{r.userId}}</dt>
+                    <dt ng-class="{'error-text':!r.tasks}">{{r.user.name}} <button ng-show="r.tasks" ng-click="sendBack(r)" type="button" class="btn btn-warning btn-xs">打回</button></dt>
                     <dd>
                         <ul>
                             <li ng-repeat="t in r.tasks">{{t.content}} <span class="task-time">({{t.time}}h)</span></li>
