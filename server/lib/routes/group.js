@@ -58,7 +58,7 @@ module.exports.addRoutes = function(app){
         User.findById(req.user.userId).exec()
             .then(function(user){
                 if(user.role=='leader'){
-                    User.findByIdAndUpdate(req.query.userId, {groupId:req.query.groupId}).exec()
+                    User.findByIdAndUpdate(req.query.userId, {groupId:req.query.groupId, groupName:req.query.groupName}).exec()
                         .then(function(){
                             res.json({code:200});
                         },function(){

@@ -31,15 +31,21 @@ module.exports.addRoutes = function(app){
     app.post('/user/report/add', security.loginRequire, function(req, res){
         var report = req.body;
         report.userId = req.user.userId;
-        Report.create(report)
-            .then(function(report){
-                res.json({
-                    code:200,
-                    id:report.id
-                });
-            },function(error){
-                var emap = {11000:'当天日报已存在'};
-                res.json({code:500,message:emap[error.code]});
+        Report.find({day:report.day, userId:report.userId}).exec()
+            .then(function(oldReport){
+                if(!oldReport||!oldReport.length){
+                    Report.create(report)
+                        .then(function(report){
+                            res.json({
+                                code:200,
+                                id:report.id
+                            });
+                        },function(error){
+                            res.json({code:500});
+                        });
+                }else{
+                    res.json({code:500, message:'当天日报已存在'});
+                }
             });
     });
     /**
@@ -59,13 +65,19 @@ module.exports.addRoutes = function(app){
      * 更新用户日报
      */
     app.post('/user/report/update', security.loginRequire, function(req, res){
-        var report = req.body;
-        Report.findOneAndUpdate(report)
+        var rp = req.body;
+        Report.findById(rp.id)
+            .then(function(report){
+                report.tasks = rp.tasks;
+                report.markModified();
+                return report.save();
+            })
             .then(function(report){
                 res.json({
                     code:200
                 });
-            },function(){
+            },function(error){
+                console.log(error.message);
                 res.json({code:500});
             });
     });
@@ -76,7 +88,7 @@ module.exports.addRoutes = function(app){
         var groupId;
         User.findById(req.query.userId)
             .then(function(user){
-                if(!user.groupId) throw Error();
+                if(!user.groupId) throw {code:'505'};
                 groupId = user.groupId;
                 return Report.findByIdAndUpdate(req.query.id, {groupId:user.groupId}).exec();
             })
@@ -86,7 +98,8 @@ module.exports.addRoutes = function(app){
                     groupId:groupId
                 });
             },function(error){
-                res.json({code:500});
+                var emap = {505:'暂无小组'};
+                res.json({code:500, message:emap[error.code]||'发送失败'});
             });
     });
     /**

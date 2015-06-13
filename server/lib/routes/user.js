@@ -24,6 +24,7 @@ module.exports.addRoutes = function(app){
             }else if(!error){
                 res.json({code:401,message:'用户名或密码错误'});
             }else{
+                console.log(error.message);
                 res.json({code:500});
             }
         };
@@ -103,10 +104,11 @@ module.exports.addRoutes = function(app){
                     code:200,
                     user:userObj
                 });
-            }, function(){
+            }, function(err){
                 res.json({
                     code:500
                 });
+                console.log(err.message);
             });
     });
     /**
