@@ -17,6 +17,10 @@ app.use(cookieParser());
 app.use(session({secret:config.server.secret}));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(function(req, res, next){
+    if(/report\/api\/(.+)/.test(req.url)) req.url = '/'+RegExp.$1;
+    next();
+});
 //security
 security.initialize();
 //resists routes
