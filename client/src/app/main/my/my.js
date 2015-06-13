@@ -46,6 +46,7 @@ angular.module('app.my', ['app.directives.list.box'])
     })
     .controller('My', ['$scope', '$http', '$modal', '$filter', function($scope, $http, $modal, $filter){
         $scope.reports = [];
+        $scope.user = window.USER;
 
         $scope.$watch('reports.length', function(length){
             if($scope.listBox){
@@ -59,7 +60,7 @@ angular.module('app.my', ['app.directives.list.box'])
 
         $scope.pageChange = function(data){
             $scope.listBox.setState('loading');
-            $http.get('/user/report/list?'+jQuery.param(data))
+            $http.get('/report/api/user/report/list?'+jQuery.param(data))
                 .success(function(data){
                     if(data.code==200){
                         if(data.reports&&data.reports.length){
@@ -87,7 +88,7 @@ angular.module('app.my', ['app.directives.list.box'])
             });
             modalInstance.result.then(function (report) {
                 report.day = $filter('date')(report.time, 'yyyy-MM-dd');
-                $http.post('/user/report/add', report)
+                $http.post('/report/api/user/report/add', report)
                     .success(function(data){
                         if(data.code==200){
                             report.id = data.id;
@@ -114,10 +115,12 @@ angular.module('app.my', ['app.directives.list.box'])
                 }
             });
             modalInstance.result.then(function (draftReport) {
-                $http.post('/user/report/update', draftReport)
+                $http.post('/report/api/user/report/update', {id:draftReport.id, tasks:draftReport.tasks})
                     .success(function(data){
                         if(data.code==200){
-                            angular.extend(report, draftReport);
+                            report.tasks = draftReport.tasks;
+                        }else{
+                            alert('操作失败');
                         }
                     });
             }, function () {
@@ -127,7 +130,7 @@ angular.module('app.my', ['app.directives.list.box'])
 
         $scope.delete = function(index){
             if(!window.confirm('确定删除日报？')) return;
-            $http.get('/user/report/delete?id='+$scope.reports[index].id)
+            $http.get('/report/api/user/report/delete?id='+$scope.reports[index].id)
                 .success(function(data){
                     if(data.code==200){
                         $scope.reports.splice(index, 1);
@@ -137,10 +140,12 @@ angular.module('app.my', ['app.directives.list.box'])
 
         $scope.send = function(report){
             if(!window.confirm('确定发送日报？')) return;
-            $http.get('/user/report/send?'+jQuery.param({id:report.id, userId:report.userId}))
+            $http.get('/report/api/user/report/send?'+jQuery.param({id:report.id, userId:report.userId}))
                 .success(function(data){
                     if(data.code==200){
                         report.groupId = data.groupId;
+                    }else{
+                        alert(data.message);
                     }
                 })
         };

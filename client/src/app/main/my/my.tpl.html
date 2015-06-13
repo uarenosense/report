@@ -1,4 +1,7 @@
-<div class="add-report"><button ng-click="add()" type="button" class="btn btn-primary btn-sm">写日报</button></div>
+<div class="add-report">
+    <button ng-click="add()" type="button" class="btn btn-primary btn-sm">写日报</button>
+    <label>所属小组：{{user.groupName?user.groupName:'[无]'}}</label>
+</div>
 <list-box name="listBox" on-page-change="pageChange" limit="15">
     <table class="table table-bordered table-hover">
         <thead>
@@ -8,7 +11,7 @@
         <th width="150">操作</th>
         </thead>
         <tbody>
-        <tr ng-repeat="r in reports">
+        <tr ng-repeat="r in reports|orderBy:'time':true">
             <td>{{$index+1}}</td>
             <td>{{r.time|date:'yyyy-MM-dd'}}</td>
             <td>

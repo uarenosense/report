@@ -1,7 +1,9 @@
 <form class="group-info-form form-inline">
     <div class="form-group">
         <label for="exampleInputName2">组名</label>
-        <input ng-model="group.name" type="text" class="form-control" id="exampleInputName2" placeholder="组名">
+        <input ng-model="group.name" type="text" class="form-control" placeholder="请输入组名">&nbsp;
+        <label for="exampleInputName2">邮件列表</label>
+        <input ng-model="group.mails" ng-list=";" type="text" class="form-control" placeholder="请输入邮件列表">
     </div>
     <button ng-click="save()" type="submit" class="btn btn-default">保存</button>
 </form>

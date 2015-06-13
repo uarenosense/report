@@ -1,6 +1,6 @@
 <list-box name="listBox" limit="15" on-page-change="pageChange">
     <!-- Table -->
-    <table class="table table-bordered table-hover">
+    <table class="table table-bordered table-hover table-group-report">
         <thead>
             <th width="40">#</th>
             <th width="120">日期</th>
@@ -22,7 +22,7 @@
                 </dl>
             </td>
             <td>
-                <button ng-click="send(u)" type="button" class="btn btn-default btn-xs">发送邮件</button>
+                <button ng-click="sendMail(gr)" type="button" class="btn btn-default btn-xs">发送邮件</button>
             </td>
         </tr>
         </tbody>

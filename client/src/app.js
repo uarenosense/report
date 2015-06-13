@@ -67,7 +67,7 @@ angular.module('app', [
             });
 
     }]);
-jQuery.get('/user/login/get')
+jQuery.get('/report/api/user/login/get')
     .success(function(data){
         if(data.code!=200) location.hash = '/login/login';
         window.USER = data.user;

@@ -7,7 +7,7 @@ angular.module('app.register', [])
             data.password = md5(data.password);
             $scope.loading = true;
             $scope.errorMessage = '';
-            $http.post('/user/register', data)
+            $http.post('/report/api/user/register', data)
                 .success(function(result){
                     $scope.loading = false;
                     if(result.code==200){

@@ -1,7 +1,7 @@
 angular.module('app.group.info', ['app.directives.list.box'])
     .controller('AddMember', ['$scope', '$modalInstance', '$http',function($scope, $modalInstance, $http){
         $scope.search = function(){
-            $http.get('/user/search?name='+$scope.keyword)
+            $http.get('/report/api/user/search?name='+$scope.keyword)
                 .success(function(data){
                     if(data.code==200){
                         $scope.users = data.users;
@@ -17,7 +17,7 @@ angular.module('app.group.info', ['app.directives.list.box'])
         };
     }])
     .controller('GroupInfo', ['$scope', '$http', '$modal',function($scope, $http, $modal){
-        $http.get('/group/info')
+        $http.get('/report/api/group/info')
             .success(function(_data){
                 $scope.group = _data.group;
             });
@@ -34,7 +34,7 @@ angular.module('app.group.info', ['app.directives.list.box'])
         });
 
         $scope.save = function(){
-            $http.post('/group/info/update', $scope.group)
+            $http.post('/report/api/group/info/update', $scope.group)
                 .success(function(data){
                     if(data.code==200){
                         alert('保存成功');
@@ -49,7 +49,7 @@ angular.module('app.group.info', ['app.directives.list.box'])
                 controller: 'AddMember'
             });
             modalInstance.result.then(function (selectedItem) {
-                $http.get('/group/members/add?'+jQuery.param({groupId:$scope.group.id, userId:selectedItem.id}))
+                $http.get('/report/api/group/members/add?'+jQuery.param({groupId:$scope.group.id, userId:selectedItem.id, groupName:$scope.group.name}))
                     .success(function(data){
                         if(data.code==200){
                             $scope.group.members.push(selectedItem);
@@ -62,7 +62,7 @@ angular.module('app.group.info', ['app.directives.list.box'])
 
         $scope.delete = function(user){
             if(!window.confirm('确定删除组员？')) return;
-            $http.get('/group/members/delete?'+jQuery.param({groupId:$scope.group.id, userId:user.id}))
+            $http.get('/report/api/group/members/delete?'+jQuery.param({groupId:$scope.group.id, userId:user.id}))
                 .success(function(data){
                     if(data.code==200){
                         var index = $scope.group.members.indexOf(user);

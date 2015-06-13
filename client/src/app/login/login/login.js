@@ -9,7 +9,7 @@ angular.module('app.login', [])
             data.password = md5(data.password);
             $scope.loading = true;
             $scope.errorMessage = '';
-            $http.post('/user/login', data)
+            $http.post('/report/api/user/login', data)
                 .success(function(result){
                     $scope.loading = false;
                     if(result.code==200){

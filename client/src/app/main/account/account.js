@@ -2,7 +2,7 @@ angular.module('app.account', ['app.directives.list.box'])
     .controller('Account', ['$scope', '$http', function($scope, $http){
         $scope.pageChange = function(data){
             $scope.listBox.setState('loading');
-            $http.get('/user/list?'+jQuery.param(data))
+            $http.get('/report/api/user/list?'+jQuery.param(data))
                 .success(function(data){
                     if(data.code==200){
                         if(data.users&&data.users.length){
@@ -23,7 +23,7 @@ angular.module('app.account', ['app.directives.list.box'])
 
         $scope.delete = function(user){
             if(!window.confirm('确定删除用户？')) return;
-            $http.get('/user/delete?id='+user.id)
+            $http.get('/report/api/user/delete?id='+user.id)
                 .success(function(data){
                     if(data.code==200){
                         var index = $scope.users.indexOf(user);
@@ -34,7 +34,7 @@ angular.module('app.account', ['app.directives.list.box'])
                 });
         };
         $scope.updateRole = function(user){
-            $http.get('/user/update/role?'+jQuery.param({id:user.id, role:user.role}))
+            $http.get('/report/api/user/update/role?'+jQuery.param({id:user.id, role:user.role}))
                 .success(function(data){
                     if(data.code==200){
 
