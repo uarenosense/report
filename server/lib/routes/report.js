@@ -3,6 +3,9 @@ var User = require('../models/user.js');
 var Report = require('../models/report.js');
 var security = require('../security.js');
 var q = require('q');
+var config = require('../../config.js');
+var mailer = require('nodemailer');
+var transporter = mailer.createTransport(config.mail);
 module.exports.addRoutes = function(app){
     /**
      * 获取用户日报
@@ -177,5 +180,23 @@ module.exports.addRoutes = function(app){
                 console.log(error.message);
                 res.json({code:500});
             });
+    });
+    /**
+     * 邮件发送小组日报
+     */
+    app.post('/group/report/mail', security.loginRequire, function(req, res){
+        transporter.sendMail({
+            from: config.mail.auth.user,
+            cc: req.body.to,
+            subject: req.body.subject,
+            html: req.body.content
+        }, function(error, info){
+            if(error) {
+                console.log(error);
+                res.json({code:500});
+            }else{
+                res.json({code:200});
+            }
+        });
     });
 };

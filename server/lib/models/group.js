@@ -3,7 +3,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var groupSchema = new Schema({
     name:String,
-    leader:String
+    leader:String,
+    mails:[String]
 });
 //set option
 groupSchema.set('collection', 'groups');

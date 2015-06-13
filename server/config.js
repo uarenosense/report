@@ -11,5 +11,14 @@ module.exports = {
     },
     security:{
         admins:['lwadmin@163.com']
+    },
+    mail:{
+        host:'smtp.163.com',
+        port:465,
+        secure:true,
+        auth:{
+            user:'llwwtest2@163.com',
+            pass:'qrkleqszhqbxpipq'
+        }
     }
 };

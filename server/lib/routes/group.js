@@ -1,6 +1,8 @@
 var Group = require('../models/group.js');
 var User = require('../models/user.js');
+var Account = require('../models/account.js');
 var security = require('../security.js');
+var q = require('q');
 module.exports.addRoutes = function(app){
     /**
      * 获取小组信息
@@ -20,7 +22,22 @@ module.exports.addRoutes = function(app){
                             return User.find({'groupId':group.id}).exec();
                         })
                         .then(function(members){
-                            res.json({code:200, group:{id:groupInfo.id, name:groupInfo.name, members:members}});
+                            var ids = [],map={};
+                            members.forEach(function(member, index){
+                                ids.push(member.id);
+                                map[member.id] = members[index] = member.toObject();
+                            });
+                            return Account.find({userId:{'$in':ids}}).exec().
+                                then(function(accounts){
+                                    accounts.forEach(function(account){
+                                        var user = map[account.userId];
+                                        if(user) user.username = account.username;
+                                    });
+                                    return members;
+                                });
+                        })
+                        .then(function(members){
+                            res.json({code:200, group:{id:groupInfo.id, name:groupInfo.name, members:members, mails:groupInfo.mails}});
                         }, function(){
                             res.json({code:500});
                         });
@@ -38,7 +55,13 @@ module.exports.addRoutes = function(app){
         User.findById(req.user.userId).exec()
             .then(function(user){
                 if(user.role=='leader'){
-                    Group.findByIdAndUpdate(req.body.id ,req.body).exec()
+                    Group.findById(req.body.id).exec()
+                        .then(function(group){
+                            group.name = req.body.name;
+                            group.mails = req.body.mails;
+                            group.markModified();
+                            return group.save();
+                        })
                         .then(function(){
                             res.json({code:200});
                         }, function(){
@@ -78,7 +101,7 @@ module.exports.addRoutes = function(app){
         User.findById(req.user.userId).exec()
             .then(function(user){
                 if(user.role=='leader'){
-                    User.findByIdAndUpdate(req.query.userId, {groupId:''}).exec()
+                    User.findByIdAndUpdate(req.query.userId, {groupId:'', groupName:''}).exec()
                         .then(function(){
                             res.json({code:200});
                         },function(){
