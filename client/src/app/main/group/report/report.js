@@ -48,7 +48,7 @@ angular.module('app.group.report', ['app.directives.list.box'])
                                 });
                                 return '<dl><strong>'+report.user.name+'</strong></dl><dt><ol>'+tasks.join('')+'</ol></dt>';
                             }).join('');
-                        $http.post('/group/report/mail', {subject:subject, to:to, content:content})
+                        $http.post('/report/api/group/report/mail', {subject:subject, to:to, content:content})
                             .success(function(data){
                                 if(data.code==200){
                                     alert('发送成功');
