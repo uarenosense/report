@@ -3,12 +3,14 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-html2js');
     // Default task.
     grunt.registerTask('default', ['build']);
     grunt.registerTask('build', ['clean', 'copy', 'concat', 'html2js','index:build']);
-    grunt.registerTask('release', ['clean', 'index:release']);
+    grunt.registerTask('release', ['clean', 'copy:img', 'cssmin', 'html2js', 'uglify','index:release']);
     //multi task
     grunt.registerMultiTask('index', 'Parse index html.', function(){
         var options = this.options();
@@ -78,6 +80,24 @@ module.exports = function(grunt){
                 dest: '<%= distdir %>/angular.js'
             }
         },
+        uglify:{
+            jquery:{
+                src:['<%= concat.jquery.src%>'],
+                dest:'<%= concat.jquery.dest%>'
+            },
+            angular:{
+                src:['<%= concat.angular.src%>'],
+                dest:'<%= concat.angular.dest%>'
+            },
+            template:{
+                src:['<%= html2js.app.dest%>', '<%= html2js.common.dest%>'],
+                dest:'<%= distdir%>/template.js'
+            },
+            js:{
+                src:['src/common/**/*.js', 'src/app/**/*.js', 'src/app.js'],
+                dest:'<%= distdir%>/main.js'
+            }
+        },
         html2js: {
             app: {
                 options: {
@@ -96,6 +116,12 @@ module.exports = function(grunt){
                 module: 'templates.common'
             }
         },
+        cssmin:{
+            release:{
+                src:['bower_components/bootstrap/dist/css/bootstrap.css', 'src/css/main.css'],
+                dest:'<%= distdir%>/css/main.css'
+            }
+        },
         index:{
             options:{
                 indexSrc:'src/index.html',
@@ -109,12 +135,17 @@ module.exports = function(grunt){
                     'angular.js',
                     'templates/**/*.js',
                     '<%= copy.js.src %>',
-                    '**/*.css']
+                    'css/main.css']
             },
             release:{
                 expand:true,
                 cwd:'<%= distdir %>',
-                src:['**/*.js', '**/*.css']
+                src:[
+                    'jquery.js',
+                    'angular.js',
+                    'template.js',
+                    'main.js',
+                    '**/*.css']
             }
         },
         watch:{

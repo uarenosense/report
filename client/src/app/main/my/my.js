@@ -25,7 +25,7 @@ angular.module('app.my', ['app.directives.list.box'])
             $modalInstance.dismiss('cancel');
         };
     }])
-    .controller('TimeDropdown', function ($scope, $log) {
+    .controller('TimeDropdown', ['$scope', '$log', function ($scope, $log) {
         var now = +new Date,
             day = 24*60*60*1000;
         $scope.items = [
@@ -43,7 +43,7 @@ angular.module('app.my', ['app.directives.list.box'])
         $scope.select = function(item){
             $scope.selected = item;
         };
-    })
+    }])
     .controller('My', ['$scope', '$http', '$modal', '$filter', function($scope, $http, $modal, $filter){
         $scope.reports = [];
         $scope.user = window.USER;
