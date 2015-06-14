@@ -17,7 +17,9 @@ angular.module('app.group.report', ['app.directives.list.box'])
                         $scope.listBox.setState('error');
                     }
                 })
-                .error();
+                .error(function(){
+                    $scope.listBox.setState('error');
+                });
         };
 
         $scope.sendBack = function(report){
