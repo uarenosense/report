@@ -135,7 +135,7 @@ module.exports = function(grunt){
                     'angular.js',
                     'templates/**/*.js',
                     '<%= copy.js.src %>',
-                    'css/main.css']
+                    '**/*.css']
             },
             release:{
                 expand:true,
@@ -145,7 +145,7 @@ module.exports = function(grunt){
                     'angular.js',
                     'template.js',
                     'main.js',
-                    '**/*.css']
+                    'css/main.css']
             }
         },
         watch:{
