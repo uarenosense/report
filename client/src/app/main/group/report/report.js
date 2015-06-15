@@ -46,7 +46,8 @@ angular.module('app.group.report', ['app.directives.list.box'])
                                 var tasks = (report.tasks||[]).map(function(task){
                                     return '<li>'+task.content+' ('+task.time+'h)</li>';
                                 });
-                                return '<dl><strong>'+report.user.name+'</strong></dl><dt><ol>'+tasks.join('')+'</ol></dt>';
+                                if(!(tasks&&tasks.length)&&report.rest) return '<dl><strong>'+report.user.name+'(请假)</strong></dl><dt></dt>';
+                                else return '<dl><strong>'+report.user.name+'</strong></dl><dt><ol>'+tasks.join('')+'</ol></dt>';
                             }).join('');
                         $http.post('/report/api/group/report/mail', {subject:subject, to:to, content:content})
                             .success(function(data){
@@ -63,6 +64,25 @@ angular.module('app.group.report', ['app.directives.list.box'])
                 })
                 .error(function(){
                     alert('小组信息获取失败');
+                });
+        };
+
+        $scope.markRest = function(day ,time, user, rp){
+            if(!confirm('确定标记请假？')) return;
+            var data = {
+                userId:user.id,
+                day:day,
+                time:time,
+                groupId:user.groupId,
+                rest:true
+            };
+            $http.post('/report/api/mark/rest', data)
+                .success(function(data){
+                    if(data.code==200){
+                        rp.rest = true;
+                    }else{
+                        alert('操作失败');
+                    }
                 });
         };
     }]);

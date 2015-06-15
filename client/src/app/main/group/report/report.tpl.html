@@ -13,7 +13,10 @@
             <td>{{gr._id}}</td>
             <td>
                 <dl ng-repeat="r in gr.reports">
-                    <dt ng-class="{'error-text':!r.tasks}">{{r.user.name}} <button ng-show="r.tasks" ng-click="sendBack(r)" type="button" class="btn btn-warning btn-xs">打回</button></dt>
+                    <dt ng-class="{'error-text':!(r.tasks&&r.tasks.length)}">{{r.user.name}}<span ng-show="!(r.tasks&&r.tasks.length)&&r.rest">(请假)</span>&nbsp;
+                        <button ng-show="r.tasks&&r.tasks.length" ng-click="sendBack(r)" type="button" class="btn btn-default btn-xs">打回</button>
+                        <button ng-hide="r.tasks&&r.tasks.length||r.rest" ng-click="markRest(gr._id, gr.time, r.user, r)" type="button" class="btn btn-default btn-xs">标记请假</button>
+                    </dt>
                     <dd>
                         <ul>
                             <li ng-repeat="t in r.tasks">{{t.content}} <span class="task-time">({{t.time}}h)</span></li>

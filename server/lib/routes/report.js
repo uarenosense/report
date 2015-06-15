@@ -199,4 +199,19 @@ module.exports.addRoutes = function(app){
             }
         });
     });
+    /**
+     * 标记休假
+     */
+    app.post('/mark/rest', security.loginRequire, function(req, res){
+        Report.create(req.body)
+            .then(function(report){
+                res.json({
+                    code:200,
+                    report:report
+                });
+            },function(error){
+                console.log(error.message);
+                res.json({code:500});
+            });
+    });
 };

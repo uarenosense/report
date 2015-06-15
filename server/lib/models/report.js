@@ -6,7 +6,8 @@ var reportSchema = new Schema({
     day:String,
     time:Number,
     groupId:String,
-    tasks:[{content:String, time:Number}]
+    tasks:[{content:String, time:Number}],
+    rest:{type:Boolean, default:false}
 });
 //set option
 reportSchema.set('collection', 'reports');
