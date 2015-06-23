@@ -1,5 +1,5 @@
 angular.module('app.my', ['app.directives.list.box'])
-    .controller('AddReport', ['$scope', '$modalInstance', 'report',function($scope, $modalInstance, report){
+    .controller('AddReport', ['$scope', '$modalInstance', 'report', function($scope, $modalInstance, report){
         $scope.report = report||{tasks:[]};
         $scope.isAdd = !report;
         $scope.report.time = $scope.report.time||+ new Date;
@@ -25,14 +25,19 @@ angular.module('app.my', ['app.directives.list.box'])
             $modalInstance.dismiss('cancel');
         };
     }])
-    .controller('TimeDropdown', ['$scope', '$log', function ($scope, $log) {
+    .controller('TimeDropdown', ['$scope', '$filter', function ($scope, $filter) {
         var now = +new Date,
             day = 24*60*60*1000;
         $scope.items = [
             {text:'今天', time:now},
             {text:'昨天', time:(now-=day)},
             {text:'前天', time:(now-=day)},
-            {text:'大前天', time:(now-=day)}
+            {text:$filter('date')(now-=day, 'yyyy-MM-dd'), time:now},
+            {text:$filter('date')(now-=day, 'yyyy-MM-dd'), time:now},
+            {text:$filter('date')(now-=day, 'yyyy-MM-dd'), time:now},
+            {text:$filter('date')(now-=day, 'yyyy-MM-dd'), time:now},
+            {text:$filter('date')(now-=day, 'yyyy-MM-dd'), time:now},
+            {text:$filter('date')(now-=day, 'yyyy-MM-dd'), time:now}
         ];
         $scope.selected = $scope.items[0];
 
