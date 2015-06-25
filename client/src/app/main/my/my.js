@@ -84,6 +84,7 @@ angular.module('app.my', ['app.directives.list.box'])
 
         $scope.add = function(){
             var modalInstance = $modal.open({
+                backdrop:'static',
                 animation: $scope.animationsEnabled,
                 templateUrl: 'main/my/add.report.tpl.html',
                 controller: 'AddReport',
@@ -111,6 +112,7 @@ angular.module('app.my', ['app.directives.list.box'])
         $scope.edit = function(report){
             var modalInstance = $modal.open({
                 animation: $scope.animationsEnabled,
+                backdrop:'static',
                 templateUrl: 'main/my/add.report.tpl.html',
                 controller: 'AddReport',
                 resolve:{
