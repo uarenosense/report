@@ -1,8 +1,10 @@
 angular.module('app.my', ['app.directives.list.box'])
-    .controller('AddReport', ['$scope', '$modalInstance', 'report', function($scope, $modalInstance, report){
+    .controller('AddReport', ['$scope', '$modalInstance', 'report', '$filter',function($scope, $modalInstance, report, $filter){
         $scope.report = report||{tasks:[]};
         $scope.isAdd = !report;
         $scope.report.time = $scope.report.time||+ new Date;
+        $scope.canEditTime = ((+ new Date)-$scope.report.time)/(24*60*60*1000)<=8||$scope.isAdd;
+        $scope.date = $filter('date')($scope.report.time, 'yyyy-MM-dd');
         $scope.timeToggled = function(selected){
             $scope.report.time = selected.time;
         };
@@ -25,21 +27,33 @@ angular.module('app.my', ['app.directives.list.box'])
             $modalInstance.dismiss('cancel');
         };
     }])
-    .controller('TimeDropdown', ['$scope', '$filter', function ($scope, $filter) {
+    .controller('TimeDropdown', ['$scope', '$filter', '$attrs',function ($scope, $filter, $attrs) {
         var now = +new Date,
-            day = 24*60*60*1000;
-        $scope.items = [
-            {text:'今天', time:now},
-            {text:'昨天', time:(now-=day)},
-            {text:'前天', time:(now-=day)},
-            {text:$filter('date')(now-=day, 'yyyy-MM-dd'), time:now},
-            {text:$filter('date')(now-=day, 'yyyy-MM-dd'), time:now},
-            {text:$filter('date')(now-=day, 'yyyy-MM-dd'), time:now},
-            {text:$filter('date')(now-=day, 'yyyy-MM-dd'), time:now},
-            {text:$filter('date')(now-=day, 'yyyy-MM-dd'), time:now},
-            {text:$filter('date')(now-=day, 'yyyy-MM-dd'), time:now}
-        ];
-        $scope.selected = $scope.items[0];
+            dayMS = 24*60*60*1000,
+            map = {
+                0:'今天',
+                1:'昨天'
+            },
+            dayMap = {
+                0:'星期天',
+                1:'星期一',
+                2:'星期二',
+                3:'星期三',
+                4:'星期四',
+                5:'星期五',
+                6:'星期六'
+            },
+            selected = $scope.$parent[$attrs.selected];
+        $scope.items = [];
+
+        for(var i=0;i<10;i++){
+            var time = new Date(now-i*dayMS),
+                date = $filter('date')(time, 'yyyy-MM-dd'),
+                item = {text:map[i]||date, date:date, time:time.getTime(), day:dayMap[time.getDay()]};
+            if(item.date==selected) $scope.selected = item;
+            $scope.items.push(item);
+        }
+        $scope.selected = $scope.selected||$scope.items[0];
 
         $scope.status = {
             isopen: false

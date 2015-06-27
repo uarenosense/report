@@ -44,6 +44,7 @@ module.exports.addRoutes = function(app){
                                 id:report.id
                             });
                         },function(error){
+                            console.log(error);
                             res.json({code:500});
                         });
                 }else{
