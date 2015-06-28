@@ -96,6 +96,8 @@ angular.module('app.my', ['app.directives.list.box'])
                             $scope.reports = data.reports;
                             $scope.listBox.setState('success');
                             $scope.listBox.setTotal(data.count);
+                        }else{
+                            $scope.listBox.setState('empty');
                         }
                     }else{
                         $scope.listBox.setState('error');
