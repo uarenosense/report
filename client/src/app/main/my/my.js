@@ -7,6 +7,7 @@ angular.module('app.my', ['app.directives.list.box'])
         $scope.date = $filter('date')($scope.report.time, 'yyyy-MM-dd');
         $scope.timeToggled = function(selected){
             $scope.report.time = selected.time;
+            $scope.report.day = selected.date;
         };
         $scope.add = function(){
             $scope.report.tasks.push({
@@ -19,7 +20,16 @@ angular.module('app.my', ['app.directives.list.box'])
         $scope.delete = function(index){
             $scope.report.tasks.splice(index, 1);
         };
+        $scope.edit = function(task){
+            task.edit = !task.edit;
+        };
         $scope.ok = function(){
+            if($scope.content&&$scope.time) {
+                $scope.report.tasks.push({
+                    content:$scope.content,
+                    time:$scope.time
+                });
+            }
             if($scope.report.tasks.length) $modalInstance.close($scope.report);
             else $modalInstance.dismiss('cancel');
         };
@@ -136,12 +146,14 @@ angular.module('app.my', ['app.directives.list.box'])
                 }
             });
             modalInstance.result.then(function (draftReport) {
-                $http.post('/report/api/user/report/update', {id:draftReport.id, tasks:draftReport.tasks})
+                $http.post('/report/api/user/report/update', {id:draftReport.id, tasks:draftReport.tasks, time:draftReport.time, day:draftReport.day})
                     .success(function(data){
                         if(data.code==200){
                             report.tasks = draftReport.tasks;
+                            report.time = draftReport.time;
+                            report.day = draftReport.day;
                         }else{
-                            alert('操作失败');
+                            alert(data.message||'操作失败');
                         }
                     });
             }, function () {

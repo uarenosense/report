@@ -18,14 +18,21 @@
         <th width="20">#</th>
         <th>内容</th>
         <th>时长(H)</th>
-        <th width="60">操作</th>
+        <th width="120">操作</th>
         </thead>
         <tbody>
         <tr ng-repeat="t in report.tasks">
             <td>{{$index+1}}</td>
-            <td>{{t.content}}</td>
-            <td>{{t.time}}</td>
             <td>
+                <span ng-hide="t.edit">{{t.content}}</span>
+                <input ng-show="t.edit" ng-model="t.content" type="text" class="form-control" placeholder="工作内容">
+            </td>
+            <td>
+                <span ng-hide="t.edit">{{t.time}}</span>
+                <input ng-show="t.edit" ng-model="t.time" type="text" class="form-control" placeholder="时长">
+            </td>
+            <td>
+                <button ng-click="edit(t)" type="button" class="btn btn-default btn-xs">{{t.edit?'保存':'编辑'}}</button>
                 <button ng-click="delete($index)" type="button" class="btn btn-danger btn-xs">删除</button>
             </td>
         </tr>

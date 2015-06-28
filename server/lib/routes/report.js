@@ -70,8 +70,20 @@ module.exports.addRoutes = function(app){
      */
     app.post('/user/report/update', security.loginRequire, function(req, res){
         var rp = req.body;
-        Report.findById(rp.id)
+        Report.findOne({day:rp.day})
             .then(function(report){
+                if(report&&report.id!=rp.id){
+                    throw {message:'当天日报已存在'};
+                }else{
+                    return report;
+                }
+            })
+            .then(function(){
+                return Report.findById(rp.id);
+            })
+            .then(function(report){
+                report.time = rp.time;
+                report.day = rp.day;
                 report.tasks = rp.tasks;
                 report.markModified();
                 return report.save();
@@ -82,8 +94,9 @@ module.exports.addRoutes = function(app){
                 });
             },function(error){
                 console.log(error.message);
-                res.json({code:500});
-            });
+                res.json({code:500, message:error.message});
+            });;
+
     });
     /**
      * 发送用户日报
