@@ -70,7 +70,7 @@ module.exports.addRoutes = function(app){
      */
     app.post('/user/report/update', security.loginRequire, function(req, res){
         var rp = req.body;
-        Report.findOne({day:rp.day})
+        Report.findOne({day:rp.day, userId:req.user.userId})
             .then(function(report){
                 if(report&&report.id!=rp.id){
                     throw {message:'当天日报已存在'};
